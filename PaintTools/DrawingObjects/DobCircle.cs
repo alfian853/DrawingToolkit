@@ -3,58 +3,64 @@ using System.Drawing;
 
 namespace DrawingToolkit.DrawingObjects
 {
-    class DobCircle : DrawingObject
+    public class DobCircle : DrawingObject
     {
-        Rectangle circle;
+        
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
 
-        public DobCircle(Rectangle cirle)
+        public DobCircle(int x, int y, int width, int height, Pen pen):base(pen)
         {
-            this.circle = cirle;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
         }
 
-        public void setCircleFromRectangle(Rectangle rect)
+        public override void Draw()
         {
-            this.circle = rect;
+            this.graphics.DrawEllipse(this.pen,
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
-        public override void reDraw(Graphics g)
+        public override void DrawPreview()
         {
-            g.DrawEllipse(this.pen, circle);
-        }
-        public override void draw(Graphics g, Pen pen)
-        {
-            this.setPen(pen);
-            g.DrawEllipse(pen, circle);
+            this.graphics.DrawEllipse(this.getFocusPen(),
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
         public override bool isClickedAt(int x, int y)
         {
-            float a = (float)this.circle.Width / 2;
-            float b = (float)this.circle.Height / 2;
-            int centerX = this.circle.X + this.circle.Width / 2;
-            int centerY = this.circle.Y + this.circle.Height / 2;
+            float a = (float)this.Width / 2;
+            float b = (float)this.Height / 2;
+            int centerX = this.X + this.Width / 2;
+            int centerY = this.Y + this.Height / 2;
             float ax = (float)Math.Pow(x-centerX,2);
             float by = (float)Math.Pow(y-centerY,2);
             ax /= (float)Math.Pow(a,2);
             by /= (float)Math.Pow(b,2);
             return Math.Abs(ax+by-1) <= 0.4;
         }
-
-        public override void moveTo(int x, int y)
+        
+        public override void updateEndPoint(int x, int y)
         {
-            throw new NotImplementedException();
+            this.X += x - this.moveStartX;
+            this.Y += y - this.moveStartY;
+            this.moveStartX = x;
+            this.moveStartY = y;
         }
 
-        public override void updateEndPoint(Point point)
+        public override void DrawMoving()
         {
-            this.circle.X += point.X - this.moveStart.X;
-            this.circle.Y += point.Y - this.moveStart.Y;
-            this.moveStart = point;
+            this.graphics.DrawEllipse(this.getFocusPen(),
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
-        public override void drawAsMovingObject(Graphics g)
-        {
-            g.DrawEllipse(this.getMovingDrawPen(), this.circle);
-        }
+       
     }
 }

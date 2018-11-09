@@ -75,6 +75,10 @@
     <Compile Include="DrawingFrame.Designer.cs">
       <DependentUpon>DrawingFrame.cs</DependentUpon>
     </Compile>
+    <Compile Include="DrawingStates\DrawingState.cs" />
+    <Compile Include="DrawingStates\MovingState.cs" />
+    <Compile Include="DrawingStates\PreviewState.cs" />
+    <Compile Include="DrawingStates\StaticState.cs" />
     <Compile Include="ICommand.cs" />
     <Compile Include="IMenuBar.cs" />
     <Compile Include="IMenuItem.cs" />
@@ -82,13 +86,14 @@
     <Compile Include="IToolItem.cs" />
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="Toolbox\IDrawingToolBox.cs" />
     <Compile Include="Toolbox\IToolbox.cs" />
     <Compile Include="Toolbox\DrawingToolbox.cs" />
     <Compile Include="Tools\CircleTool.cs" />
-    <Compile Include="Tools\IToolClickListener.cs" />
     <Compile Include="Tools\LineTool.cs" />
     <Compile Include="Tools\RectangleTool.cs" />
     <Compile Include="Tools\DrawingTool.cs" />
+    <Compile Include="Tools\SelectTool.cs" />
     <EmbeddedResource Include="DrawingFrame.resx">
       <DependentUpon>DrawingFrame.cs</DependentUpon>
     </EmbeddedResource>

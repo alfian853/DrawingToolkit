@@ -5,36 +5,43 @@ using System.Drawing.Drawing2D;
 
 namespace DrawingToolkit.DrawingObjects
 {
-    class DobRectangle : DrawingObject
+    public class DobRectangle : DrawingObject
     {
-        Rectangle rect;
+        public int X;
+        public int Y;
+        public int Width;
+        public int Height;
 
-        public DobRectangle(Rectangle rect)
+        public DobRectangle(int x,int y, int width, int height, Pen pen) : base(pen)
         {
-            this.rect = rect;
+            this.X = x;
+            this.Y = y;
+            this.Width = width;
+            this.Height = height;
         }
 
-        public void setRectangle(Rectangle rect)
+        public override void DrawMoving()
         {
-            this.rect = rect;
-        }
-        public override void drawAsMovingObject(Graphics g)
-        {
-            if (isMoving)
-            {
-                g.DrawRectangle(this.getMovingDrawPen(), this.rect);
-            }
+            this.graphics.DrawRectangle(this.getFocusPen(),
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
-        public override void reDraw(Graphics g)
+        public override void Draw()
         {
-            g.DrawRectangle(this.pen, this.rect);
+            Debug.WriteLine("draw rectangle");
+            this.graphics.DrawRectangle(this.pen,
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
-        public override void draw(Graphics g, Pen pen)
+        public override void DrawPreview()
         {
-            this.setPen(pen);
-            g.DrawRectangle(pen, this.rect);
+            Debug.WriteLine("drawPreview rectangle");
+
+            this.graphics.DrawRectangle(this.getFocusPen(),
+                this.X, this.Y, this.Width, this.Height
+            );
         }
 
         bool isInRange(float a, float x, float x2)
@@ -45,27 +52,27 @@ namespace DrawingToolkit.DrawingObjects
         public override bool isClickedAt(int x, int y)
         {
             float halfW = this.pen.Width/2;
-            if(isInRange(y, rect.Y, rect.Y + rect.Height) )
+            if(isInRange(y, this.Y, this.Y + this.Height) )
             {
-                if(isInRange(x, rect.X - halfW, rect.X + halfW))
+                if(isInRange(x, this.X - halfW, this.X + halfW))
                 {
                     return true;
                 }
-                else if (isInRange(x, rect.X + rect.Width - halfW,
-                    rect.X + rect.Width + halfW) ) 
+                else if (isInRange(x, this.X + this.Width - halfW,
+                    this.X + this.Width + halfW) ) 
                 {
                     return true;
                 }
             }
 
-            if (isInRange(x, rect.X, rect.X + rect.Width) )
+            if (isInRange(x, this.X, this.X + this.Width) )
             {
-                if (isInRange(y, rect.Y - halfW, rect.Y + halfW))
+                if (isInRange(y, this.Y - halfW, this.Y + halfW))
                 {
                     return true;
                 }
-                else if (isInRange(y, rect.Y + rect.Height - halfW,
-                    rect.Y + rect.Height + halfW))
+                else if (isInRange(y, this.Y + this.Height - halfW,
+                    this.Y + this.Height + halfW))
                 {
                     return true;
                 }
@@ -75,16 +82,13 @@ namespace DrawingToolkit.DrawingObjects
 
         }
 
-        public override void moveTo(int x, int y)
+        public override void updateEndPoint(int x, int y)
         {
-            throw new NotImplementedException();
+            this.X += x - this.moveStartX;
+            this.Y += y - this.moveStartY;
+            this.moveStartX = x;
+            this.moveStartY = y;
         }
 
-        public override void updateEndPoint(Point point)
-        {
-            this.rect.X += point.X - this.moveStart.X;
-            this.rect.Y += point.Y - this.moveStart.Y;
-            this.moveStart = point;
-        }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using DrawingToolkit.DrawingObjects;
+using DrawingToolkit.DrawingStates;
+using DrawingToolkit.Toolbox;
 using System;
 using System.Drawing;
 using System.Windows.Forms;
@@ -11,40 +13,15 @@ namespace DrawingToolkit.Tools
         int centerY;
         int edgeX;
         int edgeY;
-        Rectangle rectangle;
 
-        public CircleTool(IDrawingToolClickListener clickListener, Point position, Size size)
-            : base(clickListener, position, size)
+        DobCircle circleObject;
+
+        public CircleTool(IDrawingToolBox drawingToolBox, Point position, Size size)
+            : base(drawingToolBox, position, size)
         {
             this.toolButton.Name = "lingkaran";
             this.toolButton.BackgroundImage = global::DrawingToolkit.Properties.Resources.circle;
             this.toolButton.BackgroundImageLayout = System.Windows.Forms.ImageLayout.Stretch;
-        }
-
-        public override DrawingObject getDrawingObject()
-        {
-            if (edgeX < centerX)
-            {
-                rectangle.X = edgeX;
-                rectangle.Width = centerX - edgeX;
-            }
-            else
-            {
-                rectangle.X = centerX;
-                rectangle.Width = edgeX - centerX;
-            }
-
-            if (edgeY < centerY)
-            {
-                rectangle.Y = edgeY;
-                rectangle.Height = centerY - edgeY;
-            }
-            else
-            {
-                rectangle.Y = centerY;
-                rectangle.Height = edgeY - centerY;
-            }
-            return new DobCircle(rectangle);
         }
 
         public Button GetToolButton()
@@ -56,18 +33,47 @@ namespace DrawingToolkit.Tools
         {
             centerX = x;
             centerY = y;
+            
+            this.circleObject = new DobCircle(x, y, 0, 0, this.getPenClone());
+            this.drawingToolBox.GetCanvas()
+                .AddDrawingObject(this.circleObject);
         }
 
         public override void onMouseMove(int x, int y)
         {
             edgeX = x;
             edgeY = y;
+            if(this.circleObject != null)
+            {
+                if (edgeX < centerX)
+                {
+                    this.circleObject.X = edgeX;
+                    this.circleObject.Width = centerX - edgeX;
+                }
+                else
+                {
+                    this.circleObject.X = centerX;
+                    this.circleObject.Width = edgeX - centerX;
+                }
+
+                if (edgeY < centerY)
+                {
+                    this.circleObject.Y = edgeY;
+                    this.circleObject.Height = centerY - edgeY;
+                }
+                else
+                {
+                    this.circleObject.Y = centerY;
+                    this.circleObject.Height = edgeY - centerY;
+                }
+            }
+
         }
 
         public override void onMouseUp(int x, int y)
         {
-            this.rectangle.Width = Math.Max(0, x - this.rectangle.X);
-            this.rectangle.Height = Math.Max(0, y - this.rectangle.Y);
+            this.circleObject.SetState(StaticState.GetInstance());
+            this.circleObject = null;
         }
     }
 }

@@ -41,14 +41,14 @@ namespace DrawingToolkit
             if (c.ShowDialog() == DialogResult.OK)
             {
                 this.btnPenColor.BackColor = c.Color;
-                this.drawingCanvas.setPenColor(c.Color);
+                this.drawingCanvas.SetPenColor(c.Color);
             }
         }
         
         private void penSizeComboBox_SelectedIndexChanged(object sender, EventArgs e)
         {
             ComboBox cb = (ComboBox)sender;
-            this.drawingCanvas.setPenSize((int)cb.SelectedItem);
+            this.drawingCanvas.SetPenSize((int)cb.SelectedItem);
 
 
         }

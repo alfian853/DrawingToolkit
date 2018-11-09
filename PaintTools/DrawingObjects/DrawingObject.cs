@@ -1,23 +1,39 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DrawingToolkit.DrawingStates;
+using System;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DrawingToolkit.DrawingObjects
 {
     public abstract class DrawingObject
     {
-        abstract public void draw(Graphics g,Pen pen);
-        abstract public void reDraw(Graphics g);
-        abstract public void drawAsMovingObject(Graphics g);
+        abstract public void DrawPreview();
+        abstract public void Draw();
+        abstract public void DrawMoving();
         abstract public bool isClickedAt(int x, int y);
-        abstract public void moveTo(int x, int y);
-        protected Pen pen = new Pen(Color.Black,1);
-        protected Point moveStart;
+        protected Pen pen = new Pen(Color.Black, 4);
+        protected int moveStartX;
+        protected int moveStartY;
         protected bool isMoving;
+
+        protected DrawingState drawingState;
+        protected Graphics graphics;
+        
+        public DrawingObject(Pen pen){
+            this.pen = pen;
+            this.drawingState = PreviewState.GetInstance();
+        }
+
+        public virtual void Render()
+        {
+            this.drawingState.Draw(this);
+        }
+
+        public virtual void SetGraphic(Graphics g)
+        {
+            this.graphics = g;
+        }
+        
 
         public void setPen(Pen pen)
         {
@@ -30,14 +46,15 @@ namespace DrawingToolkit.DrawingObjects
             isMoving = false;
         }
        
-        public void setMoveStart(Point point)
+        public void setMoveStart(int x, int y)
         {
-            this.moveStart = point;
+            this.moveStartX = x;
+            this.moveStartY = y;
             this.isMoving = true;
         }
-        public abstract void updateEndPoint(Point point);
+        public abstract void updateEndPoint(int x, int y);
 
-        protected Pen getMovingDrawPen()
+        protected Pen getFocusPen()
         {
             Pen pen2 = new Pen(
                 Color.FromArgb((Math.Max((this.pen.Color.R + 80) % 255,90)),
@@ -47,6 +64,16 @@ namespace DrawingToolkit.DrawingObjects
             );
             pen2.Alignment = PenAlignment.Center;
             return pen2;
+        }
+
+        public void SetState(DrawingState state)
+        {
+            this.drawingState = state;
+        }
+
+        public DrawingState GetState()
+        {
+            return this.drawingState;
         }
 
     }

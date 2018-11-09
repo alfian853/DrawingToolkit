@@ -10,32 +10,25 @@ namespace DrawingToolkit
 {
     class DrawingCanvas : Control,ICanvas
     {
-        Graphics graphic;
-        Bitmap background;//permanent
-        Bitmap tmpBackground;//temporary
-        bool isDrawing = false;
-        bool isMoving = false;
-        ToolMode mode = ToolMode.Drawing;
         Pen pen;
         private DrawingTool drawingTool;
 
         List<DrawingObject> drawingObjects = new List<DrawingObject>();
-        DrawingObject movingObject = null;
 
-        public void setDrawingTool(DrawingTool tool)
+        public void SetDrawingTool(DrawingTool tool)
         {
             this.drawingTool = tool;
         }
         
-        public void setPenColor(Color c)
+        public void SetPenColor(Color c)
         {
-            this.pen.Color = c;
+            this.drawingTool.Pen.Color = c;
         }
 
 
-        public void setPenSize(int size)
+        public void SetPenSize(int size)
         {
-            this.pen.Width = size;
+            this.drawingTool.Pen.Width = size;
         }
 
         public DrawingCanvas(Point location,Size size)
@@ -44,120 +37,48 @@ namespace DrawingToolkit
             this.Location = location;
             this.Size = size;
             this.TabIndex = 1;
-            background = new Bitmap(this.Width, this.Height);
-            tmpBackground = new Bitmap(this.Width, this.Height);
-            Graphics tmp = Graphics.FromImage(background);
-            tmp.Clear(Color.White);
-            tmp = Graphics.FromImage(tmpBackground);
-            tmp.Clear(Color.White);
+            this.DoubleBuffered = true;
+
             pen = new Pen(Color.Black, 4);
           
         }
 
         protected override void OnMouseDown(MouseEventArgs e)
         {
-            if(this.mode == ToolMode.Drawing)
+            if(this.drawingTool != null)
             {
-                isDrawing = true;
                 this.drawingTool.onMouseDown(e.X, e.Y);
-            }
-            else if(this.mode == ToolMode.Moving)
-            {
-                int doSize = drawingObjects.Count;
-
-                Debug.WriteLine("test dob");
-                for (int i = doSize - 1; i > -1; --i)
-                {
-                    Debug.WriteLine("iterate : " + i);
-                    if(drawingObjects[i].isClickedAt(e.X, e.Y))
-                    {
-                        this.isMoving = true;
-                        this.movingObject = drawingObjects[i];
-                        this.movingObject.setMoveStart(new Point(e.X, e.Y));
-                        drawingObjects.RemoveAt(i);
-                        Debug.WriteLine("catch dob");
-                        break;
-                    }
-                }
-                Graphics g = Graphics.FromImage(background);
-                g.Clear(Color.White);
-
-
-                foreach (DrawingObject dob in drawingObjects)
-                {
-                    dob.reDraw(g);
-                }
                 this.Invalidate();
-
             }
         }
 
         protected override void OnMouseUp(MouseEventArgs e)
         {
-            
-            if(this.mode == ToolMode.Drawing)
+            if (this.drawingTool != null)
             {
-                isDrawing = false;
-                Graphics g = Graphics.FromImage(background);
-                drawingTool.onMouseUp(e.X, e.Y);
-
-                DrawingObject drawingObject = drawingTool.getDrawingObject();
-                drawingObjects.Add(drawingObject);
-                drawingObject.draw(g, this.pen);
+                this.drawingTool.onMouseUp(e.X, e.Y);
+                this.Invalidate();
             }
-            else if(this.mode == ToolMode.Moving)
-            {
-                isMoving = false;
-                if (movingObject != null)
-                {
-                    movingObject.setMoveStop();
-                    Graphics g = Graphics.FromImage(background);
-                    movingObject.reDraw(g);
-                    drawingObjects.Add(movingObject);
-                    movingObject = null;
-                    this.Invalidate();
-                }
-            }
-
         }
 
 
         protected override void OnMouseMove(MouseEventArgs e)
         {
-            if(this.mode == ToolMode.Drawing)
+            if (this.drawingTool != null)
             {
-                if (this.isDrawing)
-                {
-                    drawingTool.onMouseMove(e.X, e.Y);
-                    this.Invalidate();
-                }
+                this.drawingTool.onMouseMove(e.X, e.Y);
+                this.Invalidate();
             }
-            else if(this.mode == ToolMode.Moving)
-            {
-                if (this.isMoving)
-                {
-                    this.movingObject.updateEndPoint(new Point(e.X,e.Y));
-                    this.Invalidate();
-                }
-            }
-
-
         }
 
-        protected override void OnPaintBackground(PaintEventArgs pevent)
+        protected override void OnPaint(PaintEventArgs pevent)
         {
-            this.tmpBackground = (Bitmap)this.background.Clone();
-            this.graphic = Graphics.FromImage(this.tmpBackground);
-            if (this.mode == ToolMode.Drawing)
+            foreach (DrawingObject obj in drawingObjects)
             {
-                drawingTool.getDrawingObject().draw(this.graphic, this.pen);
+                Debug.WriteLine("onPaint");
+                obj.SetGraphic(pevent.Graphics);
+                obj.Render();
             }
-            else if(this.mode == ToolMode.Moving && movingObject != null)
-            {
-                movingObject.drawAsMovingObject(this.graphic);
-            }
-
-            pevent.Graphics.DrawImage(this.tmpBackground, 0, 0);
         }
 
         public Control GetControl()
@@ -165,9 +86,29 @@ namespace DrawingToolkit
             return this;
         }
 
-        public void setToolMode(ToolMode toolMode)
+        public void SetToolMode(ToolMode toolMode)
         {
-            this.mode = toolMode;
+            
+        }
+
+        public DrawingObject GetDrawingObjectAt(int x, int y)
+        {
+            int doSize = drawingObjects.Count;
+            
+            for (int i = doSize - 1; i > -1; --i)
+            {
+                Debug.WriteLine("iterate : " + i);
+                if (drawingObjects[i].isClickedAt(x,y))
+                {
+                    return drawingObjects[i];
+                }
+            }
+            return null;
+        }
+
+        public void AddDrawingObject(DrawingObject drawingObject)
+        {
+            drawingObjects.Add(drawingObject);
         }
     }
 }

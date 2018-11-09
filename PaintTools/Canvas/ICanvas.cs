@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using DrawingToolkit.DrawingObjects;
 using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace DrawingToolkit.Canvas
@@ -12,8 +8,10 @@ namespace DrawingToolkit.Canvas
     public interface ICanvas
     {
         Control GetControl();
-        void setDrawingTool(DrawingTool tool);
-        void setPenColor(Color c);
-        void setToolMode(ToolMode toolMode);
+        void SetDrawingTool(DrawingTool tool);
+        void SetPenColor(Color c);
+        void SetToolMode(ToolMode toolMode);
+        DrawingObject GetDrawingObjectAt(int x, int y);
+        void AddDrawingObject(DrawingObject drawingObject);
     }
 }

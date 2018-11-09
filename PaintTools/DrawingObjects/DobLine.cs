@@ -8,60 +8,50 @@ using System.Threading.Tasks;
 
 namespace DrawingToolkit.DrawingObjects
 {
-    class DobLine : DrawingObject
+    public class DobLine : DrawingObject
     {
-        Point start;
-        Point end;
+        public int sX;
+        public int sY;
+        public int eX;
+        public int eY;
 
-        public DobLine(Point start, Point end)
+        public DobLine(int sX,int sY, int eX, int eY, Pen pen) : base(pen)
         {
-            this.start = start;
-            this.end = end;
+            this.sX = sX;
+            this.sY = sY;
+            this.eX = eX;
+            this.eY = eY;
         }
 
-        public void setLine(Point start, Point end)
+        public override void DrawMoving()
         {
-            this.start = start;
-            this.end = end;
+            this.graphics.DrawLine(this.getFocusPen(), sX, sY, eX, eY);
+        }
+        public override void Draw()
+        {
+            this.graphics.DrawLine(this.pen, sX, sY, eX, eY);
         }
 
-        public override void drawAsMovingObject(Graphics g)
+        public override void DrawPreview()
         {
-            if (this.isMoving)
-            {
-                g.DrawLine(this.getMovingDrawPen(), start, end);
-            }
-        }
-        public override void reDraw(Graphics g)
-        {
-            g.DrawLine(this.pen, start, end);
-        }
-
-        public override void draw(Graphics g, Pen pen)
-        {
-            this.setPen(pen);
-            g.DrawLine(pen, start,end);
-        }
-
-        public override void moveTo(int x, int y)
-        {
-            throw new NotImplementedException();
+            this.graphics.DrawLine(this.getFocusPen(), sX, sY, eX, eY);
         }
 
         public override bool isClickedAt(int x, int y)
         {
-            float a = ((float)x - start.X) / (end.X - start.X);
-            float b = ((float)y - start.Y) / (end.Y - start.Y);
+            float a = ((float)x - sX) / (eX - sX);
+            float b = ((float)y - sY) / (eY - sY);
             return Math.Abs(a-b) <= 0.05;
         }
 
-        public override void updateEndPoint(Point point)
+        public override void updateEndPoint(int x, int y)
         {
-            start.X -= this.moveStart.X - point.X;
-            start.Y -= this.moveStart.Y - point.Y;
-            end.X -= this.moveStart.X - point.X;
-            end.Y -= this.moveStart.Y - point.Y;
-            this.moveStart = point;
+            sX -= this.moveStartX - x;
+            sY -= this.moveStartY - y;
+            eX -= this.moveStartX - x;
+            eY -= this.moveStartY - y;
+            this.moveStartX = x;
+            this.moveStartY = y;
         }
 
     }
