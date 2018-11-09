@@ -54,15 +54,16 @@ namespace DrawingToolkit.DrawingObjects
         }
         public abstract void updateEndPoint(int x, int y);
 
-        protected Pen getFocusPen()
+        protected Pen getFocusPen(DashStyle dashStyle)
         {
             Pen pen2 = new Pen(
                 Color.FromArgb((Math.Max((this.pen.Color.R + 80) % 255,90)),
                                 this.pen.Color.G, this.pen.Color.B, 0
                                ),
-               this.pen.Width + (int)Math.Max(4, pen.Width * 0.6)
+               this.pen.Width
             );
             pen2.Alignment = PenAlignment.Center;
+            pen2.DashStyle = dashStyle;
             return pen2;
         }
 

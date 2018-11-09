@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 
 namespace DrawingToolkit.DrawingObjects
 {
@@ -28,7 +29,7 @@ namespace DrawingToolkit.DrawingObjects
 
         public override void DrawPreview()
         {
-            this.graphics.DrawEllipse(this.getFocusPen(),
+            this.graphics.DrawEllipse(this.getFocusPen(DashStyle.Dot),
                 this.X, this.Y, this.Width, this.Height
             );
         }
@@ -56,7 +57,7 @@ namespace DrawingToolkit.DrawingObjects
 
         public override void DrawMoving()
         {
-            this.graphics.DrawEllipse(this.getFocusPen(),
+            this.graphics.DrawEllipse(this.getFocusPen(DashStyle.Solid),
                 this.X, this.Y, this.Width, this.Height
             );
         }

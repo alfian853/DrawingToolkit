@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Drawing;
+using System.Drawing.Drawing2D;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -25,7 +26,7 @@ namespace DrawingToolkit.DrawingObjects
 
         public override void DrawMoving()
         {
-            this.graphics.DrawLine(this.getFocusPen(), sX, sY, eX, eY);
+            this.graphics.DrawLine(this.getFocusPen(DashStyle.Solid), sX, sY, eX, eY);
         }
         public override void Draw()
         {
@@ -34,7 +35,7 @@ namespace DrawingToolkit.DrawingObjects
 
         public override void DrawPreview()
         {
-            this.graphics.DrawLine(this.getFocusPen(), sX, sY, eX, eY);
+            this.graphics.DrawLine(this.getFocusPen(DashStyle.Dot), sX, sY, eX, eY);
         }
 
         public override bool isClickedAt(int x, int y)

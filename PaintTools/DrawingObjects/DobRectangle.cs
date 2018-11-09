@@ -22,7 +22,7 @@ namespace DrawingToolkit.DrawingObjects
 
         public override void DrawMoving()
         {
-            this.graphics.DrawRectangle(this.getFocusPen(),
+            this.graphics.DrawRectangle(this.getFocusPen(DashStyle.Solid),
                 this.X, this.Y, this.Width, this.Height
             );
         }
@@ -39,7 +39,7 @@ namespace DrawingToolkit.DrawingObjects
         {
             Debug.WriteLine("drawPreview rectangle");
 
-            this.graphics.DrawRectangle(this.getFocusPen(),
+            this.graphics.DrawRectangle(this.getFocusPen(DashStyle.DashDot),
                 this.X, this.Y, this.Width, this.Height
             );
         }
