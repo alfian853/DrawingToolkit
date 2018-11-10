@@ -11,7 +11,8 @@ namespace DrawingToolkit.Canvas
         void SetDrawingTool(DrawingTool tool);
         void SetPenColor(Color c);
         void SetToolMode(ToolMode toolMode);
-        DrawingObject GetDrawingObjectAt(int x, int y);
+        DrawingObject GetDrawingObjectAt(int x, int y, bool inObject);
         void AddDrawingObject(DrawingObject drawingObject);
+        void RemoveDrawingObject(DrawingObject drawingObject);
     }
 }

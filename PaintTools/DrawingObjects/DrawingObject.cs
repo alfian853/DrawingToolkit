@@ -10,15 +10,18 @@ namespace DrawingToolkit.DrawingObjects
         abstract public void DrawPreview();
         abstract public void Draw();
         abstract public void DrawMoving();
-        abstract public bool isClickedAt(int x, int y);
+        public virtual bool isClickedAt(int x, int y, bool innerClick)
+        {
+            return false;
+        }
+
         protected Pen pen = new Pen(Color.Black, 4);
         protected int moveStartX;
         protected int moveStartY;
         protected bool isMoving;
-
         protected DrawingState drawingState;
         protected Graphics graphics;
-        
+
         public DrawingObject(Pen pen){
             this.pen = pen;
             this.drawingState = PreviewState.GetInstance();
@@ -33,6 +36,7 @@ namespace DrawingToolkit.DrawingObjects
         {
             this.graphics = g;
         }
+
         
 
         public void setPen(Pen pen)
@@ -52,7 +56,10 @@ namespace DrawingToolkit.DrawingObjects
             this.moveStartY = y;
             this.isMoving = true;
         }
-        public abstract void updateEndPoint(int x, int y);
+        public virtual void setMoveEnd(int x, int y)
+        {
+            // do nothing
+        }
 
         protected Pen getFocusPen(DashStyle dashStyle)
         {
@@ -67,7 +74,7 @@ namespace DrawingToolkit.DrawingObjects
             return pen2;
         }
 
-        public void SetState(DrawingState state)
+        public virtual void SetState(DrawingState state)
         {
             this.drawingState = state;
         }

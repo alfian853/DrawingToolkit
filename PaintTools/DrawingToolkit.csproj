@@ -62,6 +62,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Canvas\ICanvas.cs" />
+    <Compile Include="DrawingObjects\ConnectorLine.cs" />
     <Compile Include="DrawingObjects\DobCircle.cs" />
     <Compile Include="DrawingObjects\DobLine.cs" />
     <Compile Include="DrawingObjects\DobRectangle.cs" />
@@ -75,6 +76,8 @@
     <Compile Include="DrawingFrame.Designer.cs">
       <DependentUpon>DrawingFrame.cs</DependentUpon>
     </Compile>
+    <Compile Include="DrawingObjects\IConnectable.cs" />
+    <Compile Include="DrawingObjects\IConnector.cs" />
     <Compile Include="DrawingStates\DrawingState.cs" />
     <Compile Include="DrawingStates\MovingState.cs" />
     <Compile Include="DrawingStates\PreviewState.cs" />
@@ -90,6 +93,7 @@
     <Compile Include="Toolbox\IToolbox.cs" />
     <Compile Include="Toolbox\DrawingToolbox.cs" />
     <Compile Include="Tools\CircleTool.cs" />
+    <Compile Include="Tools\ConnectTool.cs" />
     <Compile Include="Tools\LineTool.cs" />
     <Compile Include="Tools\RectangleTool.cs" />
     <Compile Include="Tools\DrawingTool.cs" />

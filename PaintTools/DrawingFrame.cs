@@ -20,7 +20,7 @@ namespace DrawingToolkit
 
             this.Controls.Add(drawingCanvas);
             this.Controls.Add(drawingToolbox.GetToolbar());
-            
+
 
         }
 
@@ -49,8 +49,6 @@ namespace DrawingToolkit
         {
             ComboBox cb = (ComboBox)sender;
             this.drawingCanvas.SetPenSize((int)cb.SelectedItem);
-
-
         }
     }
 }

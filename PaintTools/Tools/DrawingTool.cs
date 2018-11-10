@@ -1,7 +1,5 @@
 ﻿using System.Windows.Forms;
-using DrawingToolkit.DrawingObjects;
 using System.Drawing;
-using DrawingToolkit.Tools;
 using System;
 using DrawingToolkit.Toolbox;
 
@@ -10,10 +8,8 @@ namespace DrawingToolkit
     public abstract class DrawingTool
     {
         protected Button toolButton = new Button();
-        private Pen pen;
+        public Pen Pen;
         protected IDrawingToolBox drawingToolBox;
-
-        public Pen Pen { get => pen; set => pen = value; }
 
         public DrawingTool(IDrawingToolBox drawingToolBox, Point position, Size size)
         {
@@ -23,7 +19,7 @@ namespace DrawingToolkit
             this.toolButton.UseVisualStyleBackColor = true;
             this.toolButton.TabIndex = 5;
             toolButton.MouseClick += new MouseEventHandler(this.onClick);
-            pen = new Pen(Color.Black, 4);
+            this.Pen = new Pen(Color.Black, 4);
         }
 
         public void onClick(object sender, EventArgs e)

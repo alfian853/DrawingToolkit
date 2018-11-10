@@ -1,5 +1,4 @@
-﻿using System;
-using System.Drawing;
+﻿using System.Drawing;
 using DrawingToolkit.DrawingObjects;
 using DrawingToolkit.DrawingStates;
 using DrawingToolkit.Toolbox;
@@ -19,7 +18,7 @@ namespace DrawingToolkit.Tools
 
         public override void onMouseDown(int x, int y)
         {
-            this.selectedObject = this.drawingToolBox.GetCanvas().GetDrawingObjectAt(x, y);
+            this.selectedObject = this.drawingToolBox.GetCanvas().GetDrawingObjectAt(x, y, false);
             if(this.selectedObject != null)
             {
                 this.selectedObject.SetState(MovingState.GetInstance());
@@ -31,7 +30,7 @@ namespace DrawingToolkit.Tools
         {
             if(this.selectedObject != null)
             {
-                this.selectedObject.updateEndPoint(x, y);
+                this.selectedObject.setMoveEnd(x, y);
             }
         }
 

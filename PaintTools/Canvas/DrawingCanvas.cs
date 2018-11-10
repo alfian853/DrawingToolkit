@@ -22,13 +22,19 @@ namespace DrawingToolkit
         
         public void SetPenColor(Color c)
         {
-            this.drawingTool.Pen.Color = c;
+            if (this.drawingTool != null)
+            {
+                this.drawingTool.Pen.Color = c;
+            }
         }
 
 
         public void SetPenSize(int size)
         {
-            this.drawingTool.Pen.Width = size;
+            if(this.drawingTool != null)
+            {
+                this.drawingTool.Pen.Width = size;
+            }
         }
 
         public DrawingCanvas(Point location,Size size)
@@ -75,7 +81,6 @@ namespace DrawingToolkit
         {
             foreach (DrawingObject obj in drawingObjects)
             {
-                Debug.WriteLine("onPaint");
                 obj.SetGraphic(pevent.Graphics);
                 obj.Render();
             }
@@ -91,14 +96,13 @@ namespace DrawingToolkit
             
         }
 
-        public DrawingObject GetDrawingObjectAt(int x, int y)
+        public DrawingObject GetDrawingObjectAt(int x, int y, bool inObject)
         {
             int doSize = drawingObjects.Count;
             
             for (int i = doSize - 1; i > -1; --i)
             {
-                Debug.WriteLine("iterate : " + i);
-                if (drawingObjects[i].isClickedAt(x,y))
+                if (drawingObjects[i].isClickedAt(x,y,inObject))
                 {
                     return drawingObjects[i];
                 }
@@ -109,6 +113,11 @@ namespace DrawingToolkit
         public void AddDrawingObject(DrawingObject drawingObject)
         {
             drawingObjects.Add(drawingObject);
+        }
+
+        public void RemoveDrawingObject(DrawingObject drawingObject)
+        {
+            drawingObjects.Remove(drawingObject);
         }
     }
 }

@@ -1,11 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.Drawing;
 using System.Drawing.Drawing2D;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace DrawingToolkit.DrawingObjects
 {
@@ -38,14 +33,14 @@ namespace DrawingToolkit.DrawingObjects
             this.graphics.DrawLine(this.getFocusPen(DashStyle.Dot), sX, sY, eX, eY);
         }
 
-        public override bool isClickedAt(int x, int y)
+        public override bool isClickedAt(int x, int y, bool innerClick)
         {
             float a = ((float)x - sX) / (eX - sX);
             float b = ((float)y - sY) / (eY - sY);
             return Math.Abs(a-b) <= 0.05;
         }
 
-        public override void updateEndPoint(int x, int y)
+        public override void setMoveEnd(int x, int y)
         {
             sX -= this.moveStartX - x;
             sY -= this.moveStartY - y;

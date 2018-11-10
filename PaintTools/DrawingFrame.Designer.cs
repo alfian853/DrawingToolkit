@@ -91,7 +91,7 @@ namespace DrawingToolkit
             this.penSizeComboBox.Name = "penSizeComboBox";
             this.penSizeComboBox.Size = new System.Drawing.Size(37, 21);
             this.penSizeComboBox.TabIndex = 0;
-            this.penSizeComboBox.Text = "1";
+            this.penSizeComboBox.Text = "4";
             this.penSizeComboBox.SelectedIndexChanged += new System.EventHandler(this.penSizeComboBox_SelectedIndexChanged);
             // 
             // DrawingFrame
